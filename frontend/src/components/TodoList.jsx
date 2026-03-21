@@ -5,8 +5,8 @@ const TodoList = ({ todos, onToggle, onDelete, onEdit }) => {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-center">
         <span className="text-5xl mb-4">📭</span>
-        <p className="text-gray-500 text-base font-medium">No tasks yet</p>
-        <p className="text-gray-400 text-sm mt-1">Add your first task above to get started.</p>
+        <p className="text-gray-500 dark:text-gray-400 text-base font-medium">No tasks yet</p>
+        <p className="text-gray-400 dark:text-gray-600 text-sm mt-1">Add your first task above to get started.</p>
       </div>
     )
   }
@@ -18,7 +18,7 @@ const TodoList = ({ todos, onToggle, onDelete, onEdit }) => {
     <div className="space-y-6">
       {pending.length > 0 && (
         <div>
-          <h3 className="text-gray-400 text-xs font-semibold uppercase tracking-widest mb-3">
+          <h3 className="text-gray-400 dark:text-gray-500 text-xs font-semibold uppercase tracking-widest mb-3">
             Pending — {pending.length}
           </h3>
           <div className="space-y-2">
@@ -31,7 +31,7 @@ const TodoList = ({ todos, onToggle, onDelete, onEdit }) => {
 
       {completed.length > 0 && (
         <div>
-          <h3 className="text-gray-400 text-xs font-semibold uppercase tracking-widest mb-3">
+          <h3 className="text-gray-400 dark:text-gray-500 text-xs font-semibold uppercase tracking-widest mb-3">
             Completed — {completed.length}
           </h3>
           <div className="space-y-2">

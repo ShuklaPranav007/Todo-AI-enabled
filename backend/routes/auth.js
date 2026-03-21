@@ -8,9 +8,14 @@ const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '7d' })
 }
 
-// @route  POST /api/auth/register
+router.get('/test', (req, res) => {
+  res.json({ message: 'Auth route working ✅' })
+})
+
 router.post('/register', async (req, res) => {
   const { name, email, password } = req.body
+
+  console.log('Register attempt:', { name, email })
 
   try {
     const existingUser = await User.findOne({ email })
@@ -19,6 +24,8 @@ router.post('/register', async (req, res) => {
     }
 
     const user = await User.create({ name, email, password })
+
+    console.log('User created:', user._id)
 
     res.status(201).json({
       user: {
@@ -29,13 +36,15 @@ router.post('/register', async (req, res) => {
       token: generateToken(user._id),
     })
   } catch (err) {
+    console.error('Register error:', err.message)
     res.status(500).json({ message: 'Server error', error: err.message })
   }
 })
 
-// @route  POST /api/auth/login
 router.post('/login', async (req, res) => {
   const { email, password } = req.body
+
+  console.log('Login attempt:', { email })
 
   try {
     const user = await User.findOne({ email })
@@ -48,6 +57,8 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Invalid email or password' })
     }
 
+    console.log('Login success:', user._id)
+
     res.status(200).json({
       user: {
         _id: user._id,
@@ -57,6 +68,7 @@ router.post('/login', async (req, res) => {
       token: generateToken(user._id),
     })
   } catch (err) {
+    console.error('Login error:', err.message)
     res.status(500).json({ message: 'Server error', error: err.message })
   }
 })

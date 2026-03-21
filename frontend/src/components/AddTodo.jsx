@@ -5,6 +5,7 @@ const AddTodo = ({ onAdd }) => {
   const [dueDate, setDueDate] = useState('')
   const [priority, setPriority] = useState('medium')
   const [loading, setLoading] = useState(false)
+  const [expanded, setExpanded] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -15,65 +16,55 @@ const AddTodo = ({ onAdd }) => {
     setDueDate('')
     setPriority('medium')
     setLoading(false)
+    setExpanded(false)
   }
 
   return (
-    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-5 mb-6">
-      <h2 className="text-gray-900 dark:text-white font-medium text-base mb-4">Add new task</h2>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm text-gray-500 dark:text-gray-400 mb-1">Task title</label>
+    <div className="bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl p-5 mb-5 transition-all duration-200">
+      <form onSubmit={handleSubmit} className="space-y-3">
+        <div className="flex gap-2">
           <input
             type="text"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="e.g. Build the login page..."
+            onChange={(e) => { setTitle(e.target.value); setExpanded(true) }}
+            onFocus={() => setExpanded(true)}
+            placeholder="Add a new task..."
             required
-            className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-400 transition"
+            className="flex-1 bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white placeholder-gray-300 dark:placeholder-zinc-600 border border-gray-200 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-400 dark:focus:border-indigo-500 transition-all duration-200"
           />
-        </div>
-
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="flex-1">
-            <label className="block text-sm text-gray-500 dark:text-gray-400 mb-1">Due date</label>
-            <input
-              type="date"
-              value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
-              className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-400 transition cursor-pointer"
-            />
-          </div>
-
-          <div className="flex-1">
-            <label className="block text-sm text-gray-500 dark:text-gray-400 mb-1">Priority</label>
-            <select
-              value={priority}
-              onChange={(e) => setPriority(e.target.value)}
-              className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-400 transition cursor-pointer"
-            >
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-            </select>
-          </div>
-        </div>
-
-        <button
-          type="submit"
-          disabled={loading || !title.trim()}
-          className="w-full bg-indigo-500 hover:bg-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium py-2.5 rounded-lg transition duration-200"
-        >
-          {loading ? (
-            <span className="flex items-center justify-center gap-2">
+          <button
+            type="submit"
+            disabled={loading || !title.trim()}
+            className="bg-indigo-500 hover:bg-indigo-600 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-150 whitespace-nowrap"
+          >
+            {loading ? (
               <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
               </svg>
-              Adding...
-            </span>
-          ) : '+ Add task'}
-        </button>
+            ) : '+ Add'}
+          </button>
+        </div>
+
+        {expanded && (
+          <div className="flex flex-col sm:flex-row gap-2 pt-1">
+            <input
+              type="date"
+              value={dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
+              className="flex-1 bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white border border-gray-200 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all duration-200"
+            />
+            <select
+              value={priority}
+              onChange={(e) => setPriority(e.target.value)}
+              className="flex-1 bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white border border-gray-200 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all duration-200"
+            >
+              <option value="low">Low priority</option>
+              <option value="medium">Medium priority</option>
+              <option value="high">High priority</option>
+            </select>
+          </div>
+        )}
       </form>
     </div>
   )

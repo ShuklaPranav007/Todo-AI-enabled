@@ -17,12 +17,8 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (formData.password !== formData.confirmPassword) {
-      return setError('Passwords do not match!')
-    }
-    if (formData.password.length < 6) {
-      return setError('Password must be at least 6 characters.')
-    }
+    if (formData.password !== formData.confirmPassword) return setError('Passwords do not match!')
+    if (formData.password.length < 6) return setError('Password must be at least 6 characters.')
     setLoading(true)
     try {
       const { data } = await API.post('/auth/register', {
@@ -40,97 +36,72 @@ const RegisterPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-black flex items-center justify-center px-4">
+      <div className="page-enter w-full max-w-sm">
 
-        <div className="mb-8">
-          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Create account</h1>
-          <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Sign up to get started with Todo AI</p>
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">
+            Todo <span className="text-indigo-500">AI</span>
+          </h1>
+          <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">Your smart task manager</p>
         </div>
 
-        {error && (
-          <div className="mb-4 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 text-red-600 dark:text-red-400 text-sm px-4 py-3 rounded-lg">
-            {error}
-          </div>
-        )}
+        <div className="bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl p-7">
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="block text-sm text-gray-500 dark:text-gray-400 mb-1">Full Name</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="John Doe"
-              required
-              className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-400 transition"
-            />
-          </div>
+          <h2 className="text-base font-semibold text-gray-900 dark:text-white mb-1">Create account</h2>
+          <p className="text-gray-400 dark:text-gray-500 text-sm mb-6">Get started for free</p>
 
-          <div>
-            <label className="block text-sm text-gray-500 dark:text-gray-400 mb-1">Email</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="you@example.com"
-              required
-              className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-400 transition"
-            />
-          </div>
+          {error && (
+            <div className="mb-4 bg-red-50 dark:bg-red-950 border border-red-100 dark:border-red-900 text-red-500 dark:text-red-400 text-sm px-4 py-3 rounded-xl">
+              {error}
+            </div>
+          )}
 
-          <div>
-            <label className="block text-sm text-gray-500 dark:text-gray-400 mb-1">Password</label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="••••••••"
-              required
-              className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-400 transition"
-            />
-          </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {[
+              { label: 'Full Name', name: 'name', type: 'text', placeholder: 'John Doe' },
+              { label: 'Email', name: 'email', type: 'email', placeholder: 'you@example.com' },
+              { label: 'Password', name: 'password', type: 'password', placeholder: '••••••••' },
+              { label: 'Confirm Password', name: 'confirmPassword', type: 'password', placeholder: '••••••••' },
+            ].map((field) => (
+              <div key={field.name}>
+                <label className="block text-xs font-medium text-gray-400 dark:text-zinc-500 mb-1.5 uppercase tracking-wider">{field.label}</label>
+                <input
+                  type={field.type}
+                  name={field.name}
+                  value={formData[field.name]}
+                  onChange={handleChange}
+                  placeholder={field.placeholder}
+                  required
+                  className="w-full bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white placeholder-gray-300 dark:placeholder-zinc-600 border border-gray-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-400 dark:focus:border-indigo-500 transition-all duration-200"
+                />
+              </div>
+            ))}
 
-          <div>
-            <label className="block text-sm text-gray-500 dark:text-gray-400 mb-1">Confirm Password</label>
-            <input
-              type="password"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              placeholder="••••••••"
-              required
-              className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-400 transition"
-            />
-          </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-indigo-500 hover:bg-indigo-600 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold py-3 rounded-xl transition-all duration-150 mt-1"
+            >
+              {loading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                  </svg>
+                  Creating account...
+                </span>
+              ) : 'Create account'}
+            </button>
+          </form>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-indigo-500 hover:bg-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium py-2.5 rounded-lg transition duration-200"
-          >
-            {loading ? (
-              <span className="flex items-center justify-center gap-2">
-                <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
-                </svg>
-                Creating account...
-              </span>
-            ) : 'Register'}
-          </button>
-        </form>
-
-        <p className="text-center text-gray-400 dark:text-gray-500 text-sm mt-6">
-          Already have an account?{' '}
-          <Link to="/login" className="text-indigo-500 hover:text-indigo-600 font-medium">
-            Login
-          </Link>
-        </p>
-
+          <p className="text-center text-gray-400 dark:text-zinc-500 text-sm mt-5">
+            Already have an account?{' '}
+            <Link to="/login" className="text-indigo-500 hover:text-indigo-400 font-medium transition-colors">
+              Sign in
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   )

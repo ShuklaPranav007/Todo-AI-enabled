@@ -13,47 +13,43 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-6 py-3">
-      <div className="max-w-4xl mx-auto flex items-center justify-between">
+    <nav className="bg-white dark:bg-zinc-900 border-b border-gray-100 dark:border-zinc-800 px-6 py-4 sticky top-0 z-50">
+      <div className="max-w-2xl mx-auto flex items-center justify-between">
 
-        <Link to="/dashboard" className="flex items-center gap-2">
-          <span className="text-gray-900 dark:text-white font-semibold text-lg">
+        <Link to="/dashboard">
+          <span className="text-base font-bold tracking-tight text-gray-900 dark:text-white">
             Todo <span className="text-indigo-500">AI</span>
           </span>
         </Link>
 
         <div className="flex items-center gap-3">
 
-          {/* Dark mode toggle */}
           <button
             onClick={toggleTheme}
-            className={`relative w-11 h-6 rounded-full transition-colors duration-300 focus:outline-none
+            className={`relative w-10 h-5.5 rounded-full transition-colors duration-300 focus:outline-none flex items-center px-0.5
               ${darkMode ? 'bg-indigo-500' : 'bg-gray-200'}`}
+            style={{ height: '22px' }}
           >
-            <span
-              className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-300
-                ${darkMode ? 'translate-x-5' : 'translate-x-0'}`}
-            />
-            <span className="absolute inset-0 flex items-center justify-between px-1 text-xs pointer-events-none">
-              <span>{darkMode ? '' : ''}</span>
-              <span className="text-gray-400">{darkMode ? '🌙' : '☀️'}</span>
+            <span className={`w-4 h-4 bg-white rounded-full shadow transition-transform duration-300 flex items-center justify-center text-xs
+              ${darkMode ? 'translate-x-[18px]' : 'translate-x-0'}`}>
+              {darkMode ? '🌙' : '☀️'}
             </span>
           </button>
 
           {user && (
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-indigo-600 dark:text-indigo-300 text-sm font-medium">
+              <div className="w-7 h-7 rounded-full bg-indigo-100 dark:bg-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400 text-xs font-bold">
                 {user.name?.charAt(0).toUpperCase()}
               </div>
-              <span className="text-gray-600 dark:text-gray-300 text-sm hidden sm:block">
-                Hey, <span className="text-gray-900 dark:text-white font-medium">{user.name}</span>!
+              <span className="text-sm text-gray-500 dark:text-zinc-400 hidden sm:block">
+                <span className="text-gray-900 dark:text-white font-medium">{user.name}</span>
               </span>
             </div>
           )}
 
           <button
             onClick={handleLogout}
-            className="text-sm text-gray-500 dark:text-gray-400 hover:text-red-500 border border-gray-200 dark:border-gray-700 hover:border-red-200 px-3 py-1.5 rounded-lg transition duration-200"
+            className="text-xs font-medium text-gray-400 dark:text-zinc-500 hover:text-red-500 dark:hover:text-red-400 border border-gray-200 dark:border-zinc-700 hover:border-red-200 dark:hover:border-red-800 px-3 py-1.5 rounded-lg transition-all duration-200 active:scale-95"
           >
             Logout
           </button>

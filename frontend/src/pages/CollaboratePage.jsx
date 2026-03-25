@@ -16,6 +16,7 @@ const CollaboratePage = () => {
   const [todosLoading, setTodosLoading] = useState(false)
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [showAddTodo, setShowAddTodo] = useState(false)
+  const [showTeamList, setShowTeamList] = useState(true)
   const [todoForm, setTodoForm] = useState({
     title: '',
     description: '',
@@ -75,8 +76,9 @@ const CollaboratePage = () => {
 
   const handleTeamUpdated = (updatedTeam) => {
     if (!updatedTeam) {
-      setTeams(teams.filter((t) => t._id !== selectedTeam._id))
-      setSelectedTeam(teams.length > 1 ? teams.find((t) => t._id !== selectedTeam._id) : null)
+      const remaining = teams.filter((t) => t._id !== selectedTeam._id)
+      setTeams(remaining)
+      setSelectedTeam(remaining.length > 0 ? remaining[0] : null)
       setTeamTodos([])
       return
     }
@@ -119,9 +121,7 @@ const CollaboratePage = () => {
   }
 
   const isAdmin = selectedTeam?.admin?._id === user?._id || selectedTeam?.admin === user?._id
-
   const acceptedMembers = selectedTeam?.members?.filter((m) => m.status === 'accepted') || []
-
   const pendingTodos = teamTodos.filter((t) => !t.completed)
   const completedTodos = teamTodos.filter((t) => t.completed)
 
@@ -149,49 +149,63 @@ const CollaboratePage = () => {
           <div className="w-7 h-7 border-2 border-gray-200 dark:border-zinc-700 border-t-indigo-500 rounded-full animate-spin"></div>
         </div>
       ) : (
-        <div className="flex gap-5">
+        <div className="flex flex-col lg:flex-row gap-5">
 
-          {/* Left — Teams List */}
-          <div className="w-64 flex-shrink-0">
+          {/* Teams List */}
+          <div className="w-full lg:w-64 flex-shrink-0">
             <div className="flex items-center justify-between mb-3">
               <p className="text-xs font-semibold text-gray-300 dark:text-zinc-600 uppercase tracking-widest">
                 My Teams
               </p>
-              <button
-                onClick={() => setShowCreateModal(true)}
-                className="text-xs font-semibold text-indigo-500 hover:text-indigo-600 transition-colors"
-              >
-                + New
-              </button>
-            </div>
-
-            {teams.length === 0 ? (
-              <div className="bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl p-6 text-center">
-                <p className="text-sm text-gray-400 dark:text-zinc-500">No teams yet</p>
+              <div className="flex items-center gap-2">
+                {/* Mobile toggle */}
+                <button
+                  onClick={() => setShowTeamList(!showTeamList)}
+                  className="lg:hidden text-xs text-gray-400 dark:text-zinc-500 border border-gray-200 dark:border-zinc-700 px-2 py-1 rounded-lg transition-all"
+                >
+                  {showTeamList ? 'Hide' : 'Show'}
+                </button>
                 <button
                   onClick={() => setShowCreateModal(true)}
-                  className="text-xs text-indigo-500 hover:text-indigo-600 font-medium mt-1 transition-colors"
+                  className="text-xs font-semibold text-indigo-500 hover:text-indigo-600 transition-colors"
                 >
-                  Create your first team
+                  + New
                 </button>
               </div>
-            ) : (
-              <div className="space-y-2">
-                {teams.map((team) => (
-                  <TeamCard
-                    key={team._id}
-                    team={team}
-                    isSelected={selectedTeam?._id === team._id}
-                    onSelect={setSelectedTeam}
-                    onUpdated={handleTeamUpdated}
-                    currentUserId={user?._id}
-                  />
-                ))}
-              </div>
-            )}
+            </div>
+
+            <div className={`${showTeamList ? 'block' : 'hidden'} lg:block`}>
+              {teams.length === 0 ? (
+                <div className="bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl p-6 text-center">
+                  <p className="text-sm text-gray-400 dark:text-zinc-500">No teams yet</p>
+                  <button
+                    onClick={() => setShowCreateModal(true)}
+                    className="text-xs text-indigo-500 hover:text-indigo-600 font-medium mt-1 transition-colors"
+                  >
+                    Create your first team
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {teams.map((team) => (
+                    <TeamCard
+                      key={team._id}
+                      team={team}
+                      isSelected={selectedTeam?._id === team._id}
+                      onSelect={(team) => {
+                        setSelectedTeam(team)
+                        setShowTeamList(false)
+                      }}
+                      onUpdated={handleTeamUpdated}
+                      currentUserId={user?._id}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Right — Team Tasks */}
+          {/* Team Tasks */}
           <div className="flex-1 min-w-0">
             {!selectedTeam ? (
               <div className="bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl p-16 text-center">
@@ -199,10 +213,9 @@ const CollaboratePage = () => {
               </div>
             ) : (
               <>
-
-                {/* Team Tasks Header */}
+                {/* Tasks Header */}
                 <div className="bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl p-5 mb-4">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div>
                       <h2 className="text-base font-semibold text-gray-900 dark:text-white">{selectedTeam.name}</h2>
                       <p className="text-xs text-gray-400 dark:text-zinc-500 mt-0.5">
@@ -212,7 +225,7 @@ const CollaboratePage = () => {
                     {isAdmin && (
                       <button
                         onClick={() => setShowAddTodo(!showAddTodo)}
-                        className="text-xs font-semibold bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-xl transition-all active:scale-95"
+                        className="w-full sm:w-auto text-xs font-semibold bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-xl transition-all active:scale-95 text-center"
                       >
                         + Add Task
                       </button>
@@ -237,11 +250,11 @@ const CollaboratePage = () => {
                         placeholder="Description (optional)"
                         className="w-full bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white placeholder-gray-300 dark:placeholder-zinc-600 border border-gray-200 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all"
                       />
-                      <div className="flex gap-2 flex-wrap">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                         <select
                           value={todoForm.assignedTo}
                           onChange={(e) => setTodoForm({ ...todoForm, assignedTo: e.target.value })}
-                          className="flex-1 bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white border border-gray-200 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all"
+                          className="bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white border border-gray-200 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all"
                         >
                           <option value="">Assign to...</option>
                           {acceptedMembers.map((m) => (
@@ -251,7 +264,7 @@ const CollaboratePage = () => {
                         <select
                           value={todoForm.priority}
                           onChange={(e) => setTodoForm({ ...todoForm, priority: e.target.value })}
-                          className="flex-1 bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white border border-gray-200 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all"
+                          className="bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white border border-gray-200 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all"
                         >
                           <option value="low">Low priority</option>
                           <option value="medium">Medium priority</option>
@@ -261,7 +274,7 @@ const CollaboratePage = () => {
                           type="date"
                           value={todoForm.dueDate}
                           onChange={(e) => setTodoForm({ ...todoForm, dueDate: e.target.value })}
-                          className="flex-1 bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white border border-gray-200 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all"
+                          className="bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white border border-gray-200 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all"
                         />
                       </div>
                       <div className="flex gap-2">
@@ -283,7 +296,7 @@ const CollaboratePage = () => {
                   )}
                 </div>
 
-                {/* Tasks */}
+                {/* Tasks List */}
                 {todosLoading ? (
                   <div className="flex justify-center py-16">
                     <div className="w-7 h-7 border-2 border-gray-200 dark:border-zinc-700 border-t-indigo-500 rounded-full animate-spin"></div>
@@ -347,7 +360,6 @@ const CollaboratePage = () => {
                     )}
                   </div>
                 )}
-
               </>
             )}
           </div>
@@ -361,7 +373,6 @@ const CollaboratePage = () => {
           onCreated={handleTeamCreated}
         />
       )}
-
     </div>
   )
 }

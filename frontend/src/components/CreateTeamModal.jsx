@@ -91,7 +91,6 @@ const CreateTeamModal = ({ onClose, onCreated }) => {
             </button>
           </div>
         </form>
-
       </div>
     </div>
   )

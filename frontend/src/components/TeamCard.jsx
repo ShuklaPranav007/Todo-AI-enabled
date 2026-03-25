@@ -9,7 +9,6 @@ const TeamCard = ({ team, isSelected, onSelect, onUpdated, currentUserId }) => {
   const [success, setSuccess] = useState('')
 
   const isAdmin = team.admin._id === currentUserId || team.admin === currentUserId
-
   const acceptedMembers = team.members?.filter((m) => m.status === 'accepted') || []
   const pendingMembers = team.members?.filter((m) => m.status === 'pending') || []
 
@@ -58,32 +57,27 @@ const TeamCard = ({ team, isSelected, onSelect, onUpdated, currentUserId }) => {
     <div
       className={`bg-white dark:bg-zinc-900 border rounded-2xl p-4 cursor-pointer transition-all duration-200
         ${isSelected
-          ? 'border-indigo-300 dark:border-indigo-700 ring-2 ring-indigo-100 dark:ring-indigo-900'
+          ? 'border-indigo-300 dark:border-indigo-700 ring-2 ring-indigo-100 dark:ring-indigo-900/50'
           : 'border-gray-100 dark:border-zinc-800 hover:border-indigo-100 dark:hover:border-zinc-700'
         }`}
       onClick={() => onSelect(team)}
     >
 
       {/* Team Header */}
-      <div className="flex items-start justify-between">
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center flex-shrink-0">
-              <span className="text-indigo-500 dark:text-indigo-400 text-xs font-bold">
-                {team.name.charAt(0).toUpperCase()}
-              </span>
-            </div>
-            <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{team.name}</p>
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex items-center gap-2 flex-1 min-w-0">
+          <div className="w-7 h-7 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center flex-shrink-0">
+            <span className="text-indigo-500 dark:text-indigo-400 text-xs font-bold">
+              {team.name.charAt(0).toUpperCase()}
+            </span>
           </div>
-          {team.description && (
-            <p className="text-xs text-gray-400 dark:text-zinc-500 mt-1.5 line-clamp-1">{team.description}</p>
-          )}
+          <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{team.name}</p>
         </div>
 
         {isAdmin && (
           <button
             onClick={(e) => { e.stopPropagation(); handleDeleteTeam() }}
-            className="p-1.5 text-gray-300 dark:text-zinc-600 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-all ml-2 flex-shrink-0"
+            className="p-1.5 text-gray-300 dark:text-zinc-600 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-all flex-shrink-0"
           >
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -91,6 +85,11 @@ const TeamCard = ({ team, isSelected, onSelect, onUpdated, currentUserId }) => {
           </button>
         )}
       </div>
+
+      {/* Description */}
+      {team.description && (
+        <p className="text-xs text-gray-400 dark:text-zinc-500 mt-2 line-clamp-1">{team.description}</p>
+      )}
 
       {/* Members */}
       <div className="mt-3 flex flex-wrap gap-1.5" onClick={(e) => e.stopPropagation()}>
@@ -106,7 +105,7 @@ const TeamCard = ({ team, isSelected, onSelect, onUpdated, currentUserId }) => {
             {isAdmin && (
               <button
                 onClick={() => handleRemoveMember(m.user._id)}
-                className="text-gray-300 dark:text-zinc-600 hover:text-red-500 transition-colors ml-0.5"
+                className="text-gray-300 dark:text-zinc-600 hover:text-red-500 transition-colors ml-0.5 leading-none"
               >
                 ×
               </button>
@@ -123,8 +122,8 @@ const TeamCard = ({ team, isSelected, onSelect, onUpdated, currentUserId }) => {
         ))}
       </div>
 
-      {/* Role badge */}
-      <div className="mt-3 flex items-center justify-between" onClick={(e) => e.stopPropagation()}>
+      {/* Role + Invite button on next line */}
+      <div className="mt-3 flex items-center justify-between gap-2" onClick={(e) => e.stopPropagation()}>
         <span className={`text-xs font-medium px-2 py-0.5 rounded-full border
           ${isAdmin
             ? 'bg-indigo-50 dark:bg-indigo-950 text-indigo-500 dark:text-indigo-400 border-indigo-100 dark:border-indigo-900'
@@ -136,7 +135,7 @@ const TeamCard = ({ team, isSelected, onSelect, onUpdated, currentUserId }) => {
         {isAdmin && (
           <button
             onClick={(e) => { e.stopPropagation(); setShowInviteForm(!showInviteForm) }}
-            className="text-xs font-semibold text-indigo-500 hover:text-indigo-600 transition-colors"
+            className="text-xs font-semibold text-indigo-500 hover:text-indigo-600 border border-indigo-100 dark:border-indigo-900 hover:bg-indigo-50 dark:hover:bg-indigo-950 px-3 py-1 rounded-lg transition-all active:scale-95"
           >
             + Invite
           </button>
@@ -144,42 +143,40 @@ const TeamCard = ({ team, isSelected, onSelect, onUpdated, currentUserId }) => {
       </div>
 
       {/* Alerts */}
-      {error && (
-        <p className="text-xs text-red-500 mt-2" onClick={(e) => e.stopPropagation()}>{error}</p>
-      )}
-      {success && (
-        <p className="text-xs text-emerald-500 mt-2" onClick={(e) => e.stopPropagation()}>{success}</p>
-      )}
+      {error && <p className="text-xs text-red-500 mt-2" onClick={(e) => e.stopPropagation()}>{error}</p>}
+      {success && <p className="text-xs text-emerald-500 mt-2" onClick={(e) => e.stopPropagation()}>{success}</p>}
 
       {/* Invite Form */}
       {showInviteForm && isAdmin && (
         <form
           onSubmit={handleInvite}
-          className="mt-3 flex gap-2"
+          className="mt-3 space-y-2"
           onClick={(e) => e.stopPropagation()}
         >
           <input
             type="email"
             value={inviteEmail}
             onChange={(e) => setInviteEmail(e.target.value)}
-            placeholder="Enter email..."
+            placeholder="Enter email to invite..."
             required
-            className="flex-1 bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white placeholder-gray-300 dark:placeholder-zinc-600 border border-gray-200 dark:border-zinc-700 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all"
+            className="w-full bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white placeholder-gray-300 dark:placeholder-zinc-600 border border-gray-200 dark:border-zinc-700 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all"
           />
-          <button
-            type="submit"
-            disabled={loading}
-            className="bg-indigo-500 hover:bg-indigo-600 disabled:opacity-50 text-white text-xs font-semibold px-3 py-2 rounded-xl transition-all active:scale-95"
-          >
-            {loading ? '...' : 'Send'}
-          </button>
-          <button
-            type="button"
-            onClick={() => setShowInviteForm(false)}
-            className="bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 text-gray-500 dark:text-zinc-400 text-xs px-3 py-2 rounded-xl transition-all active:scale-95"
-          >
-            Cancel
-          </button>
+          <div className="flex gap-2">
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex-1 bg-indigo-500 hover:bg-indigo-600 disabled:opacity-50 text-white text-xs font-semibold py-2 rounded-xl transition-all active:scale-95"
+            >
+              {loading ? 'Sending...' : 'Send Invite'}
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowInviteForm(false)}
+              className="flex-1 bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 text-gray-500 dark:text-zinc-400 text-xs py-2 rounded-xl transition-all active:scale-95"
+            >
+              Cancel
+            </button>
+          </div>
         </form>
       )}
 

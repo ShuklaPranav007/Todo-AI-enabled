@@ -20,7 +20,6 @@ const TeamTodoItem = ({ todo, teamId, isAdmin, currentUserId, onUpdated, onDelet
   const [error, setError] = useState('')
 
   const canComplete = isAdmin || todo.assignedTo?._id === currentUserId
-
   const isOverdue = todo.dueDate && !todo.completed &&
     new Date(todo.dueDate) < new Date().setHours(0, 0, 0, 0)
 
@@ -70,9 +69,7 @@ const TeamTodoItem = ({ todo, teamId, isAdmin, currentUserId, onUpdated, onDelet
         ? 'border-gray-50 dark:border-zinc-800/50 opacity-50'
         : 'border-gray-100 dark:border-zinc-800 hover:border-indigo-100 dark:hover:border-zinc-700'}`}>
 
-      {error && (
-        <p className="text-xs text-red-500 mb-2">{error}</p>
-      )}
+      {error && <p className="text-xs text-red-500 mb-2">{error}</p>}
 
       {isEditing ? (
         <div className="space-y-3">
@@ -89,11 +86,11 @@ const TeamTodoItem = ({ todo, teamId, isAdmin, currentUserId, onUpdated, onDelet
             placeholder="Description (optional)"
             className="w-full bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white placeholder-gray-300 dark:placeholder-zinc-600 border border-gray-200 dark:border-zinc-700 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all"
           />
-          <div className="flex gap-2 flex-wrap">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             <select
               value={editForm.assignedTo}
               onChange={(e) => setEditForm({ ...editForm, assignedTo: e.target.value })}
-              className="flex-1 bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white border border-gray-200 dark:border-zinc-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all"
+              className="bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white border border-gray-200 dark:border-zinc-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all"
             >
               <option value="">Unassigned</option>
               {acceptedMembers.map((m) => (
@@ -103,7 +100,7 @@ const TeamTodoItem = ({ todo, teamId, isAdmin, currentUserId, onUpdated, onDelet
             <select
               value={editForm.priority}
               onChange={(e) => setEditForm({ ...editForm, priority: e.target.value })}
-              className="flex-1 bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white border border-gray-200 dark:border-zinc-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all"
+              className="bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white border border-gray-200 dark:border-zinc-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all"
             >
               <option value="low">Low</option>
               <option value="medium">Medium</option>
@@ -113,7 +110,7 @@ const TeamTodoItem = ({ todo, teamId, isAdmin, currentUserId, onUpdated, onDelet
               type="date"
               value={editForm.dueDate}
               onChange={(e) => setEditForm({ ...editForm, dueDate: e.target.value })}
-              className="flex-1 bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white border border-gray-200 dark:border-zinc-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all"
+              className="bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white border border-gray-200 dark:border-zinc-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all"
             />
           </div>
           <div className="flex gap-2">
@@ -135,7 +132,6 @@ const TeamTodoItem = ({ todo, teamId, isAdmin, currentUserId, onUpdated, onDelet
       ) : (
         <div className="flex items-start gap-3">
 
-          {/* Toggle */}
           <button
             onClick={handleToggle}
             disabled={!canComplete || loading}
@@ -143,7 +139,7 @@ const TeamTodoItem = ({ todo, teamId, isAdmin, currentUserId, onUpdated, onDelet
               ${todo.completed
                 ? 'bg-indigo-500 border-indigo-500'
                 : canComplete
-                  ? 'border-gray-300 dark:border-zinc-600 hover:border-indigo-400 active:scale-90'
+                  ? 'border-gray-300 dark:border-zinc-600 hover:border-indigo-400 active:scale-90 cursor-pointer'
                   : 'border-gray-200 dark:border-zinc-700 opacity-30 cursor-not-allowed'}`}
           >
             {todo.completed && (
@@ -153,7 +149,6 @@ const TeamTodoItem = ({ todo, teamId, isAdmin, currentUserId, onUpdated, onDelet
             )}
           </button>
 
-          {/* Content */}
           <div className="flex-1 min-w-0">
             <p className={`text-sm font-medium break-words transition-all duration-200
               ${todo.completed ? 'line-through text-gray-300 dark:text-zinc-600' : 'text-gray-800 dark:text-zinc-100'}`}>
@@ -161,29 +156,24 @@ const TeamTodoItem = ({ todo, teamId, isAdmin, currentUserId, onUpdated, onDelet
             </p>
 
             {todo.description && (
-              <p className="text-xs text-gray-400 dark:text-zinc-500 mt-0.5">{todo.description}</p>
+              <p className="text-xs text-gray-400 dark:text-zinc-500 mt-0.5 break-words">{todo.description}</p>
             )}
 
             <div className="flex flex-wrap gap-1.5 mt-2">
-
-              {/* Priority */}
               <span className={`text-xs px-2 py-0.5 rounded-full border font-medium ${priorityConfig[todo.priority]}`}>
                 {todo.priority.charAt(0).toUpperCase() + todo.priority.slice(1)}
               </span>
 
-              {/* Assigned to */}
               {todo.assignedTo && (
                 <span className="text-xs px-2 py-0.5 rounded-full border bg-indigo-50 dark:bg-indigo-950 text-indigo-500 dark:text-indigo-400 border-indigo-100 dark:border-indigo-900 font-medium">
                   → {todo.assignedTo.name}
                 </span>
               )}
 
-              {/* Created by */}
               <span className="text-xs px-2 py-0.5 rounded-full border bg-gray-50 dark:bg-zinc-800 text-gray-400 dark:text-zinc-500 border-gray-100 dark:border-zinc-700 font-medium">
                 by {todo.createdBy.name}
               </span>
 
-              {/* Due date */}
               {todo.dueDate && (
                 <span className={`text-xs px-2 py-0.5 rounded-full border font-medium
                   ${isOverdue
@@ -194,17 +184,14 @@ const TeamTodoItem = ({ todo, teamId, isAdmin, currentUserId, onUpdated, onDelet
                 </span>
               )}
 
-              {/* Completed by */}
               {todo.completed && todo.completedBy && (
                 <span className="text-xs px-2 py-0.5 rounded-full border bg-emerald-50 dark:bg-emerald-950 text-emerald-500 dark:text-emerald-400 border-emerald-100 dark:border-emerald-900 font-medium">
                   Done by {todo.completedBy.name}
                 </span>
               )}
-
             </div>
           </div>
 
-          {/* Admin actions */}
           {isAdmin && (
             <div className="flex items-center gap-1 flex-shrink-0">
               <button

@@ -1,6 +1,6 @@
 import express from 'express'
-import Todo from '../models/Todo.js'
-import protect from '../middleware/authMiddleware.js'
+import Todo from './Todo.js'
+import protect from '../../middleware/authMiddleware.js'
 
 const router = express.Router()
 

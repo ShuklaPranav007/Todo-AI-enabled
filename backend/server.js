@@ -4,10 +4,10 @@ dotenv.config()
 import express from 'express'
 import cors from 'cors'
 import connectDB from './config/db.js'
-import authRoutes from './routes/auth.js'
-import todoRoutes from './routes/todos.js'
-import teamRoutes from './routes/teams.js'
-import teamTodoRoutes from './routes/teamTodos.js'
+import authRoutes from './module/auth/authRoute.js'
+import todoRoutes from './module/todo/todoRoute.js'
+import teamRoutes from './module/collab/teamRoute.js'
+import teamTodoRoutes from './module/collab/teamTodosRoute.js'
 
 const app = express()
 

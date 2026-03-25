@@ -1,7 +1,7 @@
 import express from 'express'
-import TeamTodo from '../models/TeamTodo.js'
-import Team from '../models/Team.js'
-import protect from '../middleware/authMiddleware.js'
+import TeamTodo from './TeamTodo.js'
+import Team from './Team.js'
+import protect from '../../middleware/authMiddleware.js'
 
 const router = express.Router()
 

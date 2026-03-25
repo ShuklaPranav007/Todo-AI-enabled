@@ -73,7 +73,7 @@ const DashboardPage = () => {
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`px-5 py-2 rounded-xl text-sm font-semibold transition-all duration-200 active:scale-95
+              className={`px-4 sm:px-5 py-2 rounded-xl text-sm font-semibold transition-all duration-200 active:scale-95
                 ${activeTab === tab.key
                   ? 'bg-indigo-500 text-white shadow-sm'
                   : 'text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:hover:text-zinc-300'
@@ -117,7 +117,7 @@ const DashboardPage = () => {
                   className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 active:scale-95
                     ${filter === f
                       ? 'bg-indigo-500 text-white'
-                      : 'bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 text-gray-400 dark:text-zinc-500 hover:text-indigo-500 dark:hover:text-indigo-400 hover:border-indigo-200 dark:hover:border-indigo-900'
+                      : 'bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 text-gray-400 dark:text-zinc-500 hover:text-indigo-500 dark:hover:text-indigo-400'
                     }`}
                 >
                   {f === 'all' ? 'All' : f.charAt(0).toUpperCase() + f.slice(1)}

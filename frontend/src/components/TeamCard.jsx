@@ -58,22 +58,25 @@ const TeamCard = ({ team, isSelected, onSelect, onUpdated, currentUserId }) => {
       className={`bg-white dark:bg-zinc-900 border rounded-2xl p-4 cursor-pointer transition-all duration-200
         ${isSelected
           ? 'border-indigo-300 dark:border-indigo-700 ring-2 ring-indigo-100 dark:ring-indigo-900/50'
-          : 'border-gray-100 dark:border-zinc-800 hover:border-indigo-100 dark:hover:border-zinc-700'
+          : 'border-gray-100 dark:border-zinc-800 hover:border-indigo-200 dark:hover:border-zinc-700'
         }`}
       onClick={() => onSelect(team)}
     >
-
       {/* Team Header */}
-      <div className="flex items-start justify-between gap-2">
-        <div className="flex items-center gap-2 flex-1 min-w-0">
-          <div className="w-7 h-7 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center flex-shrink-0">
-            <span className="text-indigo-500 dark:text-indigo-400 text-xs font-bold">
-              {team.name.charAt(0).toUpperCase()}
-            </span>
-          </div>
-          <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{team.name}</p>
+      <div className="flex items-center gap-2.5">
+        <div className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 text-sm font-bold transition-colors
+          ${isSelected
+            ? 'bg-indigo-500 text-white'
+            : 'bg-indigo-50 dark:bg-indigo-900/40 text-indigo-500 dark:text-indigo-400'
+          }`}>
+          {team.name.charAt(0).toUpperCase()}
         </div>
-
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{team.name}</p>
+          {team.description && (
+            <p className="text-xs text-gray-400 dark:text-zinc-500 truncate mt-0.5">{team.description}</p>
+          )}
+        </div>
         {isAdmin && (
           <button
             onClick={(e) => { e.stopPropagation(); handleDeleteTeam() }}
@@ -86,15 +89,10 @@ const TeamCard = ({ team, isSelected, onSelect, onUpdated, currentUserId }) => {
         )}
       </div>
 
-      {/* Description */}
-      {team.description && (
-        <p className="text-xs text-gray-400 dark:text-zinc-500 mt-2 line-clamp-1">{team.description}</p>
-      )}
-
       {/* Members */}
-      <div className="mt-3 flex flex-wrap gap-1.5" onClick={(e) => e.stopPropagation()}>
+      <div className="flex flex-wrap gap-1.5 mt-3" onClick={(e) => e.stopPropagation()}>
         <span className="text-xs px-2 py-0.5 rounded-full border bg-indigo-50 dark:bg-indigo-950 text-indigo-500 dark:text-indigo-400 border-indigo-100 dark:border-indigo-900 font-medium">
-          👑 {team.admin.name}
+          {team.admin.name}
         </span>
         {acceptedMembers.map((m) => (
           <span
@@ -105,7 +103,7 @@ const TeamCard = ({ team, isSelected, onSelect, onUpdated, currentUserId }) => {
             {isAdmin && (
               <button
                 onClick={() => handleRemoveMember(m.user._id)}
-                className="text-gray-300 dark:text-zinc-600 hover:text-red-500 transition-colors ml-0.5 leading-none"
+                className="text-gray-300 dark:text-zinc-600 hover:text-red-500 transition-colors leading-none"
               >
                 ×
               </button>
@@ -122,16 +120,15 @@ const TeamCard = ({ team, isSelected, onSelect, onUpdated, currentUserId }) => {
         ))}
       </div>
 
-      {/* Role + Invite button on next line */}
-      <div className="mt-3 flex items-center justify-between gap-2" onClick={(e) => e.stopPropagation()}>
-        <span className={`text-xs font-medium px-2 py-0.5 rounded-full border
+      {/* Role + Invite */}
+      <div className="flex items-center justify-between mt-3" onClick={(e) => e.stopPropagation()}>
+        <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border
           ${isAdmin
             ? 'bg-indigo-50 dark:bg-indigo-950 text-indigo-500 dark:text-indigo-400 border-indigo-100 dark:border-indigo-900'
             : 'bg-gray-50 dark:bg-zinc-800 text-gray-400 dark:text-zinc-500 border-gray-100 dark:border-zinc-700'
           }`}>
           {isAdmin ? 'Admin' : 'Member'}
         </span>
-
         {isAdmin && (
           <button
             onClick={(e) => { e.stopPropagation(); setShowInviteForm(!showInviteForm) }}
@@ -142,9 +139,8 @@ const TeamCard = ({ team, isSelected, onSelect, onUpdated, currentUserId }) => {
         )}
       </div>
 
-      {/* Alerts */}
-      {error && <p className="text-xs text-red-500 mt-2" onClick={(e) => e.stopPropagation()}>{error}</p>}
-      {success && <p className="text-xs text-emerald-500 mt-2" onClick={(e) => e.stopPropagation()}>{success}</p>}
+      {error && <p className="text-xs text-red-500 mt-2">{error}</p>}
+      {success && <p className="text-xs text-emerald-500 mt-2">{success}</p>}
 
       {/* Invite Form */}
       {showInviteForm && isAdmin && (
@@ -179,7 +175,6 @@ const TeamCard = ({ team, isSelected, onSelect, onUpdated, currentUserId }) => {
           </div>
         </form>
       )}
-
     </div>
   )
 }

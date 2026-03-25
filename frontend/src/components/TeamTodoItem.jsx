@@ -10,17 +10,19 @@ const priorityConfig = {
 const TeamTodoItem = ({ todo, teamId, isAdmin, currentUserId, onUpdated, onDeleted, acceptedMembers }) => {
   const [isEditing, setIsEditing] = useState(false)
   const [editForm, setEditForm] = useState({
-    title: todo.title,
-    description: todo.description || '',
-    assignedTo: todo.assignedTo?._id || '',
-    priority: todo.priority,
-    dueDate: todo.dueDate?.slice(0, 10) || '',
+    title: todo?.title || '',
+    description: todo?.description || '',
+    assignedTo: todo?.assignedTo?._id || '',
+    priority: todo?.priority || 'medium',
+    dueDate: todo?.dueDate?.slice(0, 10) || '',
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const canComplete = isAdmin || todo.assignedTo?._id === currentUserId
-  const isOverdue = todo.dueDate && !todo.completed &&
+  if (!todo) return null
+
+  const canComplete = isAdmin || todo?.assignedTo?._id === currentUserId
+  const isOverdue = todo?.dueDate && !todo?.completed &&
     new Date(todo.dueDate) < new Date().setHours(0, 0, 0, 0)
 
   const handleToggle = async () => {
@@ -67,7 +69,7 @@ const TeamTodoItem = ({ todo, teamId, isAdmin, currentUserId, onUpdated, onDelet
     <div className={`todo-enter bg-white dark:bg-zinc-900 border rounded-2xl p-4 transition-all duration-200
       ${todo.completed
         ? 'border-gray-50 dark:border-zinc-800/50 opacity-50'
-        : 'border-gray-100 dark:border-zinc-800 hover:border-indigo-100 dark:hover:border-zinc-700'}`}>
+        : 'border-gray-100 dark:border-zinc-800 hover:border-indigo-200 dark:hover:border-zinc-700'}`}>
 
       {error && <p className="text-xs text-red-500 mb-2">{error}</p>}
 
@@ -93,7 +95,7 @@ const TeamTodoItem = ({ todo, teamId, isAdmin, currentUserId, onUpdated, onDelet
               className="bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white border border-gray-200 dark:border-zinc-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all"
             >
               <option value="">Unassigned</option>
-              {acceptedMembers.map((m) => (
+              {acceptedMembers?.map((m) => (
                 <option key={m.user._id} value={m.user._id}>{m.user.name}</option>
               ))}
             </select>
@@ -151,28 +153,37 @@ const TeamTodoItem = ({ todo, teamId, isAdmin, currentUserId, onUpdated, onDelet
 
           <div className="flex-1 min-w-0">
             <p className={`text-sm font-medium break-words transition-all duration-200
-              ${todo.completed ? 'line-through text-gray-300 dark:text-zinc-600' : 'text-gray-800 dark:text-zinc-100'}`}>
+              ${todo.completed
+                ? 'line-through text-gray-300 dark:text-zinc-600'
+                : 'text-gray-800 dark:text-zinc-100'}`}>
               {todo.title}
             </p>
 
             {todo.description && (
-              <p className="text-xs text-gray-400 dark:text-zinc-500 mt-0.5 break-words">{todo.description}</p>
+              <p className="text-xs text-gray-400 dark:text-zinc-500 mt-0.5 break-words">
+                {todo.description}
+              </p>
             )}
 
             <div className="flex flex-wrap gap-1.5 mt-2">
-              <span className={`text-xs px-2 py-0.5 rounded-full border font-medium ${priorityConfig[todo.priority]}`}>
-                {todo.priority.charAt(0).toUpperCase() + todo.priority.slice(1)}
+
+              <span className={`text-xs px-2 py-0.5 rounded-full border font-medium ${priorityConfig[todo.priority] || priorityConfig.medium}`}>
+                {todo.priority
+                  ? todo.priority.charAt(0).toUpperCase() + todo.priority.slice(1)
+                  : 'Medium'}
               </span>
 
-              {todo.assignedTo && (
+              {todo.assignedTo?.name && (
                 <span className="text-xs px-2 py-0.5 rounded-full border bg-indigo-50 dark:bg-indigo-950 text-indigo-500 dark:text-indigo-400 border-indigo-100 dark:border-indigo-900 font-medium">
                   → {todo.assignedTo.name}
                 </span>
               )}
 
-              <span className="text-xs px-2 py-0.5 rounded-full border bg-gray-50 dark:bg-zinc-800 text-gray-400 dark:text-zinc-500 border-gray-100 dark:border-zinc-700 font-medium">
-                by {todo.createdBy.name}
-              </span>
+              {todo.createdBy?.name && (
+                <span className="text-xs px-2 py-0.5 rounded-full border bg-gray-50 dark:bg-zinc-800 text-gray-400 dark:text-zinc-500 border-gray-100 dark:border-zinc-700 font-medium">
+                  by {todo.createdBy.name}
+                </span>
+              )}
 
               {todo.dueDate && (
                 <span className={`text-xs px-2 py-0.5 rounded-full border font-medium
@@ -180,15 +191,18 @@ const TeamTodoItem = ({ todo, teamId, isAdmin, currentUserId, onUpdated, onDelet
                     ? 'bg-red-50 dark:bg-red-950 text-red-500 dark:text-red-400 border-red-100 dark:border-red-900'
                     : 'bg-gray-50 dark:bg-zinc-800 text-gray-400 dark:text-zinc-500 border-gray-100 dark:border-zinc-700'}`}>
                   {isOverdue ? 'Overdue · ' : ''}
-                  {new Date(todo.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                  {new Date(todo.dueDate).toLocaleDateString('en-US', {
+                    month: 'short', day: 'numeric', year: 'numeric'
+                  })}
                 </span>
               )}
 
-              {todo.completed && todo.completedBy && (
+              {todo.completed && todo.completedBy?.name && (
                 <span className="text-xs px-2 py-0.5 rounded-full border bg-emerald-50 dark:bg-emerald-950 text-emerald-500 dark:text-emerald-400 border-emerald-100 dark:border-emerald-900 font-medium">
                   Done by {todo.completedBy.name}
                 </span>
               )}
+
             </div>
           </div>
 

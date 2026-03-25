@@ -24,19 +24,17 @@ const InviteNotification = ({ invites, onRespond }) => {
             className="bg-white dark:bg-zinc-900 border border-indigo-100 dark:border-indigo-900/50 rounded-2xl p-4"
           >
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
-                  {invite.name}
-                </p>
-                <p className="text-xs text-gray-400 dark:text-zinc-500 mt-0.5">
-                  Invited by{' '}
-                  <span className="text-indigo-500 font-medium">{invite.admin?.name}</span>
-                </p>
-                {invite.description && (
-                  <p className="text-xs text-gray-400 dark:text-zinc-600 mt-0.5 truncate">
-                    {invite.description}
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-900/40 flex items-center justify-center text-indigo-500 dark:text-indigo-400 text-sm font-bold flex-shrink-0">
+                  {invite.name.charAt(0).toUpperCase()}
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white">{invite.name}</p>
+                  <p className="text-xs text-gray-400 dark:text-zinc-500 mt-0.5">
+                    Invited by{' '}
+                    <span className="text-indigo-500 font-medium">{invite.admin?.name}</span>
                   </p>
-                )}
+                </div>
               </div>
               <div className="flex gap-2 flex-shrink-0">
                 <button

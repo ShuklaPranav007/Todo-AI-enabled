@@ -128,7 +128,6 @@ const CollaboratePage = () => {
   return (
     <div>
 
-      {/* Alerts */}
       {error && (
         <div className="mb-4 bg-red-50 dark:bg-red-950 border border-red-100 dark:border-red-900 text-red-500 dark:text-red-400 text-sm px-4 py-3 rounded-xl flex justify-between items-center">
           {error}
@@ -141,7 +140,6 @@ const CollaboratePage = () => {
         </div>
       )}
 
-      {/* Pending Invites */}
       <InviteNotification invites={invites} onRespond={handleInviteRespond} />
 
       {loading ? (
@@ -149,19 +147,18 @@ const CollaboratePage = () => {
           <div className="w-7 h-7 border-2 border-gray-200 dark:border-zinc-700 border-t-indigo-500 rounded-full animate-spin"></div>
         </div>
       ) : (
-        <div className="flex flex-col lg:flex-row gap-5">
+        <div className="flex flex-col md:flex-row gap-5">
 
           {/* Teams List */}
-          <div className="w-full lg:w-64 flex-shrink-0">
+          <div className="w-full md:w-64 flex-shrink-0">
             <div className="flex items-center justify-between mb-3">
               <p className="text-xs font-semibold text-gray-300 dark:text-zinc-600 uppercase tracking-widest">
                 My Teams
               </p>
               <div className="flex items-center gap-2">
-                {/* Mobile toggle */}
                 <button
                   onClick={() => setShowTeamList(!showTeamList)}
-                  className="lg:hidden text-xs text-gray-400 dark:text-zinc-500 border border-gray-200 dark:border-zinc-700 px-2 py-1 rounded-lg transition-all"
+                  className="md:hidden text-xs text-gray-400 dark:text-zinc-500 border border-gray-200 dark:border-zinc-700 px-2 py-1 rounded-lg transition-all"
                 >
                   {showTeamList ? 'Hide' : 'Show'}
                 </button>
@@ -174,7 +171,7 @@ const CollaboratePage = () => {
               </div>
             </div>
 
-            <div className={`${showTeamList ? 'block' : 'hidden'} lg:block`}>
+            <div className={`${showTeamList ? 'block' : 'hidden'} md:block`}>
               {teams.length === 0 ? (
                 <div className="bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl p-6 text-center">
                   <p className="text-sm text-gray-400 dark:text-zinc-500">No teams yet</p>
@@ -213,7 +210,6 @@ const CollaboratePage = () => {
               </div>
             ) : (
               <>
-                {/* Tasks Header */}
                 <div className="bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl p-5 mb-4">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div>
@@ -232,7 +228,6 @@ const CollaboratePage = () => {
                     )}
                   </div>
 
-                  {/* Add Task Form */}
                   {showAddTodo && isAdmin && (
                     <form onSubmit={handleAddTodo} className="mt-4 space-y-3 pt-4 border-t border-gray-100 dark:border-zinc-800">
                       <input
@@ -296,7 +291,6 @@ const CollaboratePage = () => {
                   )}
                 </div>
 
-                {/* Tasks List */}
                 {todosLoading ? (
                   <div className="flex justify-center py-16">
                     <div className="w-7 h-7 border-2 border-gray-200 dark:border-zinc-700 border-t-indigo-500 rounded-full animate-spin"></div>
@@ -336,7 +330,6 @@ const CollaboratePage = () => {
                         </div>
                       </div>
                     )}
-
                     {completedTodos.length > 0 && (
                       <div>
                         <p className="text-xs font-semibold text-gray-300 dark:text-zinc-600 uppercase tracking-widest mb-3 px-1">
@@ -366,7 +359,6 @@ const CollaboratePage = () => {
         </div>
       )}
 
-      {/* Create Team Modal */}
       {showCreateModal && (
         <CreateTeamModal
           onClose={() => setShowCreateModal(false)}

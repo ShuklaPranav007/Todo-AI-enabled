@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import API from '../api/axios'
+import API from '../../api/axios'
 
 const priorityConfig = {
   high:   'bg-red-50 dark:bg-red-950 text-red-500 dark:text-red-400 border-red-100 dark:border-red-900',

@@ -15,15 +15,12 @@ const Navbar = () => {
   return (
     <nav className="bg-white dark:bg-zinc-900 border-b border-gray-100 dark:border-zinc-800 px-6 py-4 sticky top-0 z-50">
       <div className="max-w-2xl mx-auto flex items-center justify-between">
-
         <Link to="/dashboard">
           <span className="text-base font-bold tracking-tight text-gray-900 dark:text-white">
             Todo <span className="text-indigo-500">AI</span>
           </span>
         </Link>
-
         <div className="flex items-center gap-3">
-
           <button
             onClick={toggleTheme}
             className={`relative w-10 h-5.5 rounded-full transition-colors duration-300 focus:outline-none flex items-center px-0.5
@@ -35,7 +32,6 @@ const Navbar = () => {
               {darkMode ? '🌙' : '☀️'}
             </span>
           </button>
-
           {user && (
             <div className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-full bg-indigo-100 dark:bg-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400 text-xs font-bold">
@@ -46,14 +42,12 @@ const Navbar = () => {
               </span>
             </div>
           )}
-
           <button
             onClick={handleLogout}
             className="text-xs font-medium text-gray-400 dark:text-zinc-500 hover:text-red-500 dark:hover:text-red-400 border border-gray-200 dark:border-zinc-700 hover:border-red-200 dark:hover:border-red-800 px-3 py-1.5 rounded-lg transition-all duration-200 active:scale-95"
           >
             Logout
           </button>
-
         </div>
       </div>
     </nav>

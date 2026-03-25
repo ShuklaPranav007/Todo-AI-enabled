@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
-import { useAuth } from '../context/AuthContext'
-import API from '../api/axios'
-import CreateTeamModal from '../components/CreateTeamModal'
-import InviteNotification from '../components/InviteNotification'
-import TeamCard from '../components/TeamCard'
-import TeamTodoItem from '../components/TeamTodoItem'
+import { useAuth } from '../../context/AuthContext'
+import API from '../../api/axios'
+import CreateTeamModal from './CreateTeamModal'
+import InviteNotification from './InviteNotification'
+import TeamCard from './TeamCard'
+import TeamTodoItem from './TeamTodoItem'
 
 const CollaboratePage = () => {
   const { user } = useAuth()
@@ -127,7 +127,6 @@ const CollaboratePage = () => {
 
   return (
     <div>
-
       {error && (
         <div className="mb-4 bg-red-50 dark:bg-red-950 border border-red-100 dark:border-red-900 text-red-500 dark:text-red-400 text-sm px-4 py-3 rounded-xl flex justify-between items-center">
           {error}
@@ -148,7 +147,6 @@ const CollaboratePage = () => {
         </div>
       ) : (
         <div className="flex flex-col md:flex-row gap-5">
-
           {/* Teams List */}
           <div className="w-full md:w-64 flex-shrink-0">
             <div className="flex items-center justify-between mb-3">

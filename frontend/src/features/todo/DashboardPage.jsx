@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
-import Navbar from '../components/Navbar'
-import AddTodo from '../components/AddTodo'
-import TodoList from '../components/TodoList'
-import CollaboratePage from './CollaboratePage'
-import API from '../api/axios'
+import Navbar from '../../components/Navbar'
+import AddTodo from './AddTodo'
+import TodoList from './TodoList'
+import CollaboratePage from '../collab/CollaboratePage'
+import API from '../../api/axios'
 
 const DashboardPage = () => {
   const [todos, setTodos] = useState([])

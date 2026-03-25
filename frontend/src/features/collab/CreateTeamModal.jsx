@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import API from '../api/axios'
+import API from '../../api/axios'
 
 const CreateTeamModal = ({ onClose, onCreated }) => {
   const [form, setForm] = useState({ name: '', description: '' })
@@ -23,7 +23,6 @@ const CreateTeamModal = ({ onClose, onCreated }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/40 backdrop-blur-sm">
       <div className="bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl p-6 w-full max-w-md shadow-xl">
-
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-base font-semibold text-gray-900 dark:text-white">Create new team</h2>
           <button
@@ -35,13 +34,11 @@ const CreateTeamModal = ({ onClose, onCreated }) => {
             </svg>
           </button>
         </div>
-
         {error && (
           <div className="mb-4 bg-red-50 dark:bg-red-950 border border-red-100 dark:border-red-900 text-red-500 dark:text-red-400 text-sm px-4 py-3 rounded-xl">
             {error}
           </div>
         )}
-
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-medium text-gray-400 dark:text-zinc-500 mb-1.5 uppercase tracking-wider">Team Name</label>
@@ -54,7 +51,6 @@ const CreateTeamModal = ({ onClose, onCreated }) => {
               className="w-full bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white placeholder-gray-300 dark:placeholder-zinc-600 border border-gray-200 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-400 dark:focus:border-indigo-500 transition-all"
             />
           </div>
-
           <div>
             <label className="block text-xs font-medium text-gray-400 dark:text-zinc-500 mb-1.5 uppercase tracking-wider">Description</label>
             <textarea
@@ -65,7 +61,6 @@ const CreateTeamModal = ({ onClose, onCreated }) => {
               className="w-full bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white placeholder-gray-300 dark:placeholder-zinc-600 border border-gray-200 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-400 dark:focus:border-indigo-500 transition-all resize-none"
             />
           </div>
-
           <div className="flex gap-2 pt-1">
             <button
               type="submit"

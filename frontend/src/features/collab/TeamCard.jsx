@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import API from '../api/axios'
+import API from '../../api/axios'
 
 const TeamCard = ({ team, isSelected, onSelect, onUpdated, currentUserId }) => {
   const [showInviteForm, setShowInviteForm] = useState(false)

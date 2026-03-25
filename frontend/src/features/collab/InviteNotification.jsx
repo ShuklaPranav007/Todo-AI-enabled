@@ -1,4 +1,4 @@
-import API from '../api/axios'
+import API from '../../api/axios'
 
 const InviteNotification = ({ invites, onRespond }) => {
   if (!invites || invites.length === 0) return null

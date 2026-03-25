@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
-import API from '../api/axios'
+import { useAuth } from '../../context/AuthContext'
+import API from '../../api/axios'
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '' })
@@ -38,25 +38,20 @@ const RegisterPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-black flex items-center justify-center px-4">
       <div className="page-enter w-full max-w-sm">
-
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">
             Todo <span className="text-indigo-500">AI</span>
           </h1>
           <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">Your smart task manager</p>
         </div>
-
         <div className="bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl p-7">
-
           <h2 className="text-base font-semibold text-gray-900 dark:text-white mb-1">Create account</h2>
           <p className="text-gray-400 dark:text-gray-500 text-sm mb-6">Get started for free</p>
-
           {error && (
             <div className="mb-4 bg-red-50 dark:bg-red-950 border border-red-100 dark:border-red-900 text-red-500 dark:text-red-400 text-sm px-4 py-3 rounded-xl">
               {error}
             </div>
           )}
-
           <form onSubmit={handleSubmit} className="space-y-4">
             {[
               { label: 'Full Name', name: 'name', type: 'text', placeholder: 'John Doe' },
@@ -77,7 +72,6 @@ const RegisterPage = () => {
                 />
               </div>
             ))}
-
             <button
               type="submit"
               disabled={loading}
@@ -94,7 +88,6 @@ const RegisterPage = () => {
               ) : 'Create account'}
             </button>
           </form>
-
           <p className="text-center text-gray-400 dark:text-zinc-500 text-sm mt-5">
             Already have an account?{' '}
             <Link to="/login" className="text-indigo-500 hover:text-indigo-400 font-medium transition-colors">
